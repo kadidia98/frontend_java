@@ -3,12 +3,15 @@ import { Form, Input, Button, Card, Typography, Watermark } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from './context/AuthContext';
 
 const { Title } = Typography;
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate(); //  useNavigate pour la navigation
+  const { login } = useContext(AuthContext); //  useContext pour la gestion de l'authentification
 
   const onFinish = async (values) => {
     try {
@@ -19,7 +22,8 @@ const Login = () => {
       });
   
       if (response.status === 200) {
-        navigate('/dashboard');
+        login(); //  on appelle la fonction login pour mettre à jour le contexte
+        navigate('/dashboard'); //  on navigue vers la page dashboard
       } else {
         setErrorMessage('Email ou mot de passe incorrect'); //  le message d'erreur en cas d'échec de connexion
       }
